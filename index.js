@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
+import {Stats} from 'fast-stats'
 
-// return frequency of members of an array
+// PRIVATE: return frequency of members of an array
 function sortByFrequency (array) {
   var frequency = {}
 
@@ -13,12 +14,12 @@ function sortByFrequency (array) {
   return uniques.sort((a, b) => {
     return frequency[b] - frequency[a]
   }).map(ball => {
-    return {ball: ball, frequency: frequency[ball]}
+    return [ball, frequency[ball]]
   })
 }
 
 // get all powerball winners
-export const numbers = (startDate, endDate) => {
+function numbers (startDate, endDate) {
   return fetch('http://www.powerball.com/powerball/winnums-text.txt')
     .then(res => {
       return res.text()
@@ -31,7 +32,7 @@ export const numbers = (startDate, endDate) => {
     .then(lines => {
       return lines
         .filter((line, i, a) => {
-          return i > 0 && i < (a.length - 1)
+          return i > 0 && line !== ''
         })
         .map(line => {
           return {
@@ -62,8 +63,8 @@ export const numbers = (startDate, endDate) => {
 }
 
 // get frequencies of white & red balls
-export const frequencies = () => {
-  return numbers()
+function frequencies (startDate, endDate) {
+  return numbers(startDate, endDate)
     .then(winners => {
       var balls = [[], []]
       winners.forEach(winner => {
@@ -76,3 +77,37 @@ export const frequencies = () => {
       return [sortByFrequency(balls[0]), sortByFrequency(balls[1])]
     })
 }
+
+// given a frequencies from a ball-spread from above, calculate arithmetic mean of ball-count
+function mean (freq) {
+  var s1 = new Stats().push(freq.map(v => { return v[1] }))
+  return s1.amean().toFixed(4)
+}
+
+// given a frequencies from a ball-spread from above, calculate geometric mean of ball-count
+function gmean (freq) {
+  var s1 = new Stats().push(freq.map(v => { return v[1] }))
+  return s1.gmean().toFixed(4)
+}
+
+// given a frequencies from a ball-spread from above, calculate median of ball-count
+function median (freq) {
+  var s1 = new Stats().push(freq.map(v => { return v[1] }))
+  return s1.median().toFixed(4)
+}
+
+// given a frequencies from a ball-spread from above, calculate range of ball-count
+function range (freq) {
+  var s1 = new Stats().push(freq.map(v => { return v[1] }))
+  return s1.range()
+}
+
+// given a frequencies from a ball-spread from above, calculate standard deviation of ball-count
+function stddev (freq) {
+  var s1 = new Stats().push(freq.map(v => { return v[1] }))
+  return s1.stddev().toFixed(4)
+}
+
+const σ = stddev
+
+export default {numbers, frequencies, mean, gmean, median, range, stddev, σ}
