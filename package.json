@@ -1,5 +1,5 @@
 {
-  "name": "lottery_predict",
+  "name": "powerball",
   "version": "0.0.1",
   "description": "My attempt at predicting powerball numbers with nodejs",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/konsumer/lottery_predict.git"
+    "url": "git+https://github.com/konsumer/powerball.git"
   },
   "author": "David Konsumer <konsumer@jetboystudio.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/konsumer/lottery_predict/issues"
+    "url": "https://github.com/konsumer/powerball/issues"
   },
-  "homepage": "https://github.com/konsumer/lottery_predict#readme",
+  "homepage": "https://github.com/konsumer/powerball",
   "dependencies": {
     "babel-cli": "^6.3.17",
     "babel-core": "^6.3.21",

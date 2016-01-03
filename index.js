@@ -109,5 +109,6 @@ function stddev (freq) {
 }
 
 const σ = stddev
+const μ = mean
 
-export default {numbers, frequencies, mean, gmean, median, range, stddev, σ}
+export default {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ}
