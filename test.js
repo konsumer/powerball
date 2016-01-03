@@ -70,7 +70,7 @@ describe('statistical analysis', () => {
 
   it('should be able to calculate arithmatic mean from a date-range', () => {
     assert.equal(powerball.mean(freq[0]), 1.4286, 'calculate average for white balls')
-    assert.equal(powerball.mean(freq[1]), 1.2, 'calculate average for red balls')
+    assert.equal(powerball.μ(freq[1]), 1.2, 'calculate average for red balls')
   })
 
   it('should be able to calculate geometric mean from a date-range', () => {
