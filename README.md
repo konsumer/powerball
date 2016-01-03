@@ -52,7 +52,7 @@ Several statistical analysis methods are included to make rolling your own numbe
 
 Calculate the arithmatic mean from a list of frequencies.
 
-The arithmetic mean is calculated as the sum of all data points divided by the number of data points.  This is useful for data sets that are fairly uniform, following a linear or binomial distribution.  Use the `amean()` method or the `μ()` method to get at it:
+The arithmetic mean is calculated as the sum of all data points divided by the number of data points.  This is useful for data sets that are fairly uniform, following a linear or binomial distribution.  Use the `amean()` method or the `μ()` method to get at it:
 
 ```js
 powerball.frequencies()
@@ -104,7 +104,7 @@ powerball.frequencies()
     })
 ```
 
-#### stddev() or σ()
+#### stddev()
 
 Calculate the standard deviatation from a list of frequencies.
 
