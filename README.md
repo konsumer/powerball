@@ -108,7 +108,7 @@ powerball.frequencies()
 
 Calculate the standard deviatation from a list of frequencies.
 
-This tells you the spread of your data if it follows a normal (or close to normal) distribution, ie, the bell curve. Use the `stddev()` method or the `σ()` method to get at it.
+This tells you the spread of your data if it follows a normal (or close to normal) distribution, ie, the bell curve. Use the `stddev()` method or the `σ()` method to get at it.
 
 ```js
 powerball.frequencies()
