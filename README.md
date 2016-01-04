@@ -10,7 +10,17 @@ My examples are all in ES6.
 I included the command `powerball`, if you install with `npm install -g powerball` that will predict numbers.
 
 ```
+Usage: powerball [options]
 
+Options:
+  -h, --help   Show help                                               [boolean]
+  --count, -c  Count of number sets to return. The pools are limited, so it's
+               wise to keep this under 13 or so.                   [default: 10]
+  --start, -s  the start-date to look at numbers. Format: DD/MM/YYYY
+  --end, -e    the end-date to look at numbers. Format: DD/MM/YYYY
+
+Examples:
+  powerball.js -c 5 -s 10/1/1999  Get 5 numbers from 10/1/1999 to now
 ```
 
 ### `numbers()`
