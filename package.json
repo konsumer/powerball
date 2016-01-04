@@ -1,6 +1,6 @@
 {
   "name": "powerball",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "My attempt at predicting powerball numbers with nodejs",
   "main": "lib.js",
   "scripts": {
@@ -9,6 +9,12 @@
     "build": "babel index.js  --presets es2015 --plugins add-module-exports > lib.js",
     "prepublish": "npm run build"
   },
+  "keywords": [
+    "lottery",
+    "powerball",
+    "statistics",
+    "analysis"
+  ],
   "bin": {
     "powerball": "powerball.js"
   },
