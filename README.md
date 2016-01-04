@@ -20,7 +20,7 @@ Options:
   --end, -e    the end-date to look at numbers. Format: DD/MM/YYYY
 
 Examples:
-  powerball.js -c 5 -s 10/1/1999  Get 5 numbers from 10/1/1999 to now
+  powerball -c 5 -s 10/1/1999  Get 5 numbers from 10/1/1999 to now
 ```
 
 ### `numbers()`
