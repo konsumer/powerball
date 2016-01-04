@@ -16,7 +16,7 @@
     "analysis"
   ],
   "bin": {
-    "powerball": "powerball.js"
+    "powerball": "cli.js"
   },
   "repository": {
     "type": "git",
