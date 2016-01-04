@@ -1,6 +1,8 @@
 # powerball
 My attempt at predicting Powerball numbers with nodejs
 
+[![npm version](https://badge.fury.io/js/powerball.svg)](https://badge.fury.io/js/powerball)
+
 ## usage
 
 My examples are all in ES6.
