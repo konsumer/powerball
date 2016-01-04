@@ -3,6 +3,8 @@ My attempt at predicting Powerball numbers with nodejs
 
 [![npm version](https://badge.fury.io/js/powerball.svg)](https://badge.fury.io/js/powerball)
 
+See it in action [here](https://tonicdev.com/konsumer/powerball)
+
 ## usage
 
 My examples are all in ES6.
