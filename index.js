@@ -195,5 +195,7 @@ function predict (count, startDate, endDate) {
 
 const σ = stddev
 const μ = mean
+const powerball = {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ, predict}
 
-export default {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ, predict}
+export default powerball
+

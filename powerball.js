@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var powerball = require(__dirname + '/lib.js').default
+var powerball = require(__dirname + '/lib.js')
 
 var argv = require('yargs')
   .usage('Usage: $0 [options]')
