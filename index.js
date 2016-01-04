@@ -1,11 +1,13 @@
 import fetch from 'node-fetch'
-import {Stats} from 'fast-stats'
+import { Stats } from 'fast-stats'
 
 // PRIVATE: return frequency of members of an array
 function sortByFrequency (array) {
   var frequency = {}
 
-  array.forEach(value => { frequency[value] = 0 })
+  array.forEach(value => {
+    frequency[value] = 0
+  })
 
   var uniques = array.filter(value => {
     return ++frequency[value] === 1
@@ -16,6 +18,40 @@ function sortByFrequency (array) {
   }).map(ball => {
     return [ball, frequency[ball]]
   })
+}
+
+// PRIVATE: remove an item from the pool
+function removeFromPool (member, pool) {
+  var i = pool[0].indexOf(member)
+  if (i !== -1) {
+    pool[0].splice(i, 1)
+    pool[1].splice(i, 1)
+  }
+  return pool
+}
+
+// PRIVATE: shorthand for ranged random
+function rand (min, max) {
+  return Math.random() * (max - min) + min
+}
+
+// PRIVATE: weighted random
+function getWeightedRandomItem (pool) {
+  var list = pool[0]
+  var weight = pool[1]
+  var total_weight = weight.reduce(function (prev, cur, i, arr) {
+    return prev + cur
+  })
+  var random_num = rand(0, total_weight)
+  var weight_sum = 0
+  for (var i = 0; i < list.length; i++) {
+    weight_sum += weight[i]
+    weight_sum = +weight_sum.toFixed(2)
+
+    if (random_num <= weight_sum) {
+      return list[i]
+    }
+  }
 }
 
 // get all powerball winners
@@ -80,35 +116,84 @@ function frequencies (startDate, endDate) {
 
 // given a frequencies from a ball-spread from above, calculate arithmetic mean of ball-count
 function mean (freq) {
-  var s1 = new Stats().push(freq.map(v => { return v[1] }))
+  var s1 = new Stats().push(freq.map(v => {
+    return v[1]
+  }))
   return s1.amean().toFixed(4)
 }
 
 // given a frequencies from a ball-spread from above, calculate geometric mean of ball-count
 function gmean (freq) {
-  var s1 = new Stats().push(freq.map(v => { return v[1] }))
+  var s1 = new Stats().push(freq.map(v => {
+    return v[1]
+  }))
   return s1.gmean().toFixed(4)
 }
 
 // given a frequencies from a ball-spread from above, calculate median of ball-count
 function median (freq) {
-  var s1 = new Stats().push(freq.map(v => { return v[1] }))
+  var s1 = new Stats().push(freq.map(v => {
+    return v[1]
+  }))
   return s1.median().toFixed(4)
 }
 
 // given a frequencies from a ball-spread from above, calculate range of ball-count
 function range (freq) {
-  var s1 = new Stats().push(freq.map(v => { return v[1] }))
+  var s1 = new Stats().push(freq.map(v => {
+    return v[1]
+  }))
   return s1.range()
 }
 
 // given a frequencies from a ball-spread from above, calculate standard deviation of ball-count
 function stddev (freq) {
-  var s1 = new Stats().push(freq.map(v => { return v[1] }))
+  var s1 = new Stats().push(freq.map(v => {
+    return v[1]
+  }))
   return s1.stddev().toFixed(4)
+}
+
+// predict powerball weighted by the past
+function predict (count, startDate, endDate) {
+  if (!count) count = 1
+  return frequencies(startDate, endDate)
+    .then(winners => {
+      var out = []
+      var white = [[], []]
+      var red = [[], []]
+      winners[0].forEach(val => {
+        white[0].push(val[0])
+        white[1].push(val[1])
+      })
+      winners[1].forEach(val => {
+        red[0].push(val[0])
+        red[1].push(val[1])
+      })
+
+      for (let i = 0; i < count; i++) {
+        var innerOut = []
+        for (let j = 0; j < 5; j++) {
+          var newWhite = getWeightedRandomItem(white)
+          innerOut.push(newWhite)
+          white = removeFromPool(newWhite, white)
+        }
+        var newRed = getWeightedRandomItem(red)
+        innerOut.push(newRed)
+        red = removeFromPool(newRed, red)
+        out.push(innerOut)
+      }
+
+      // TODO: check that in each set there are no repeats between red/white dupes
+
+      if (out.length === 1) {
+        return out[0]
+      }
+      return out
+    })
 }
 
 const σ = stddev
 const μ = mean
 
-export default {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ}
+export default {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ, predict}

@@ -98,3 +98,21 @@ describe('statistical analysis', () => {
     assert.equal(powerball.σ(freq[1]), 0.4000, 'calculate average for red balls')
   })
 })
+
+describe('prediction', () => {
+  it('should be able to lay down a reasonable prediction', () => {
+    return powerball.predict()
+      .then(predictions => {
+        assert(Array.isArray(predictions), 'is an array')
+        assert.equal(predictions.length, 6, 'prediction length should be 6.')
+      })
+  })
+  it('should be able to lay down a bunch of reasonable predictions', () => {
+    return powerball.predict(10)
+      .then(predictions => {
+        assert(Array.isArray(predictions), 'is an array')
+        assert.equal(predictions.length, 10, 'prediction count should be 10.')
+        assert.equal(predictions[0].length, 6, 'prediction length should be 6.')
+      })
+  })
+})
