@@ -31,13 +31,13 @@ function removeFromPool (member, pool) {
 }
 
 // PRIVATE: given a frequency pool of winners and a max for possible numbers, add any that are un-accounted for with a weight of 1
-function addRemaining(pool, max){
+function addRemaining (pool, max) {
   var i = 0
   var all = new Array(max).map(() => {
     return i++
   })
   all.forEach(v => {
-    if (pool[0].indexOf(v) === -1){
+    if (pool[0].indexOf(v) === -1) {
       pool[0].push(v)
       pool[1].push(1)
     }
@@ -191,7 +191,7 @@ function predict (count, startDate, endDate, newRules) {
           red[0].push(val[0])
           red[1].push(val[1] + 1)
         }
-      })   
+      })
 
       red = addRemaining(red, newRules ? 26 : 35)
       white = addRemaining(white, newRules ? 69 : 59)
@@ -223,4 +223,3 @@ const μ = mean
 const powerball = {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ, predict}
 
 export default powerball
-
