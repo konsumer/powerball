@@ -22,6 +22,8 @@ Options:
                wise to keep this under 13 or so.                   [default: 10]
   --start, -s  the start-date to look at numbers. Format: DD/MM/YYYY
   --end, -e    the end-date to look at numbers. Format: DD/MM/YYYY
+  --old, -o    In October 2015, the pools of numbers changed. This forces the
+               old number-set.                                         [boolean]
 
 Examples:
   powerball -c 5 -s 10/1/1999  Get 5 numbers from 10/1/1999 to now
