@@ -20,13 +20,28 @@ function sortByFrequency (array) {
   })
 }
 
-// PRIVATE: remove an item from the pool
+// PRIVATE: remove an item from the frequency pool of winners
 function removeFromPool (member, pool) {
   var i = pool[0].indexOf(member)
   if (i !== -1) {
     pool[0].splice(i, 1)
     pool[1].splice(i, 1)
   }
+  return pool
+}
+
+// PRIVATE: given a frequency pool of winners and a max for possible numbers, add any that are un-accounted for with a weight of 1
+function addRemaining(pool, max){
+  var i = 0
+  var all = new Array(max).map(() => {
+    return i++
+  })
+  all.forEach(v => {
+    if (pool[0].indexOf(v) === -1){
+      pool[0].push(v)
+      pool[1].push(1)
+    }
+  })
   return pool
 }
 
@@ -155,21 +170,31 @@ function stddev (freq) {
 }
 
 // predict powerball weighted by the past
-function predict (count, startDate, endDate) {
+function predict (count, startDate, endDate, newRules) {
   if (!count) count = 1
+  if (newRules === null){
+    newRules  = true
+  }
   return frequencies(startDate, endDate)
     .then(winners => {
       var out = []
       var white = [[], []]
       var red = [[], []]
       winners[0].forEach(val => {
-        white[0].push(val[0])
-        white[1].push(val[1])
+        if (!newRules || (val[0] > 0 && val[0] < 70)){
+          white[0].push(val[0])
+          white[1].push(val[1]+1)
+        }
       })
       winners[1].forEach(val => {
-        red[0].push(val[0])
-        red[1].push(val[1])
-      })
+        if (!newRules || (val[0] > 0 && val[0] < 27)){
+          red[0].push(val[0])
+          red[1].push(val[1]+1)
+        }
+      })      
+
+      red = addRemaining(red, newRules ? 26 : 35)
+      white = addRemaining(white, newRules ? 69 : 59)
 
       for (let i = 0; i < count; i++) {
         var innerOut = []

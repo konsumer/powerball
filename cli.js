@@ -14,6 +14,10 @@ var argv = require('yargs')
   .alias('end', 'e')
   .describe('e', 'the end-date to look at numbers. Format: DD/MM/YYYY')
 
+  .boolean('o')
+  .alias('old', 'o')
+  .describe('o', 'In October 2015, the pools of numbers changed. This forces the old number-set.')
+
   .help('h')
   .alias('h', 'help')
 
@@ -30,7 +34,7 @@ function pad (n, width, z) {
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
 }
 
-powerball.predict(argv.count, startDate, endDate)
+powerball.predict(argv.count, startDate, endDate, !argv.old)
   .then(function (predictions) {
     if (predictions.length && predictions[0].length) {
       console.log(
