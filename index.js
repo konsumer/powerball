@@ -172,8 +172,8 @@ function stddev (freq) {
 // predict powerball weighted by the past
 function predict (count, startDate, endDate, newRules) {
   if (!count) count = 1
-  if (newRules === null){
-    newRules  = true
+  if (newRules === null) {
+    newRules = true
   }
   return frequencies(startDate, endDate)
     .then(winners => {
@@ -181,17 +181,17 @@ function predict (count, startDate, endDate, newRules) {
       var white = [[], []]
       var red = [[], []]
       winners[0].forEach(val => {
-        if (!newRules || (val[0] > 0 && val[0] < 70)){
+        if (!newRules || (val[0] > 0 && val[0] < 70)) {
           white[0].push(val[0])
-          white[1].push(val[1]+1)
+          white[1].push(val[1] + 1)
         }
       })
       winners[1].forEach(val => {
-        if (!newRules || (val[0] > 0 && val[0] < 27)){
+        if (!newRules || (val[0] > 0 && val[0] < 27)) {
           red[0].push(val[0])
-          red[1].push(val[1]+1)
+          red[1].push(val[1] + 1)
         }
-      })      
+      })   
 
       red = addRemaining(red, newRules ? 26 : 35)
       white = addRemaining(white, newRules ? 69 : 59)

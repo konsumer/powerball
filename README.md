@@ -70,7 +70,7 @@ powerball.frequencies(new Date('11/25/2015'), new Date('01/02/2016'))
 
 ### `predict()`
 
-This will simply give you some non-repeating random numbers, weighted by previous wins. YOu can optionallly  give it a `count` to get more than 1 number, and a `startDate` and `endDate`, just like `frequencies()` & `numbers()`.
+This will simply give you some non-repeating random numbers, weighted by previous wins. You can optionallly  give it a `count` to get more than 1 number, and a `startDate` and `endDate`, just like `frequencies()` & `numbers()`. The 4th parameter is a boolean to enable new number-pool (default is true.)
 
 ```js
 powerball.predict()
