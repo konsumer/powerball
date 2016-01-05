@@ -32,16 +32,12 @@ function removeFromPool (member, pool) {
 
 // PRIVATE: given a frequency pool of winners and a max for possible numbers, add any that are un-accounted for with a weight of 1
 function addRemaining (pool, max) {
-  var i = 0
-  var all = new Array(max).map(() => {
-    return i++
-  })
-  all.forEach(v => {
-    if (pool[0].indexOf(v) === -1) {
-      pool[0].push(v)
+  for (let i = 1; i <= max; i++) {
+    if (pool[0].indexOf(i) === -1) {
+      pool[0].push(i)
       pool[1].push(1)
     }
-  })
+  }
   return pool
 }
 
