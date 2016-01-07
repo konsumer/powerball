@@ -66,7 +66,8 @@ function getWeightedRandomItem (pool) {
 }
 
 // get all powerball winners
-function numbers (startDate, endDate) {
+var winner_cache
+function numbers (startDate, endDate, cache) {
   return fetch('http://www.powerball.com/powerball/winnums-text.txt')
     .then(res => {
       return res.text()
@@ -105,13 +106,14 @@ function numbers (startDate, endDate) {
           return winner.date <= end
         })
       }
+      winner_cache = winners
       return winners
     })
 }
 
 // get frequencies of white & red balls
-function frequencies (startDate, endDate) {
-  return numbers(startDate, endDate)
+function frequencies (startDate, endDate, cache) {
+  return numbers(startDate, endDate, cache)
     .then(winners => {
       var balls = [[], []]
       winners.forEach(winner => {
@@ -166,12 +168,12 @@ function stddev (freq) {
 }
 
 // predict powerball weighted by the past
-function predict (count, startDate, endDate, newRules) {
+function predict (count, startDate, endDate, newRules, cache) {
   if (!count) count = 1
   if (newRules === null) {
     newRules = true
   }
-  return frequencies(startDate, endDate)
+  return frequencies(startDate, endDate, cache)
     .then(winners => {
       var out = []
       var white = [[], []]
