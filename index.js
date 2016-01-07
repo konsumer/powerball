@@ -68,6 +68,24 @@ function getWeightedRandomItem (pool) {
 // get all powerball winners
 var winner_cache
 function numbers (startDate, endDate, cache) {
+  if (cache && winner_cache) {
+    return new Promise((resolve, reject) => {
+      var winners = winner_cache.slice()
+      if (startDate) {
+        const start = startDate.getTime()
+        winners = winners.filter(winner => {
+          return winner.date >= start
+        })
+      }
+      if (endDate) {
+        const end = endDate.getTime()
+        winners = winners.filter(winner => {
+          return winner.date <= end
+        })
+      }
+      resolve(winners)
+    })
+  }
   return fetch('http://www.powerball.com/powerball/winnums-text.txt')
     .then(res => {
       return res.text()
@@ -94,6 +112,7 @@ function numbers (startDate, endDate, cache) {
         })
     })
     .then(winners => {
+      winner_cache = winners.slice()
       if (startDate) {
         const start = startDate.getTime()
         winners = winners.filter(winner => {
@@ -106,7 +125,6 @@ function numbers (startDate, endDate, cache) {
           return winner.date <= end
         })
       }
-      winner_cache = winners
       return winners
     })
 }
