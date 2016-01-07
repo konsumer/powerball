@@ -78,9 +78,6 @@ function numbers (startDate, endDate) {
     })
     .then(lines => {
       return lines
-        .filter((line, i, a) => {
-          return i > 0 && line !== ''
-        })
         .map(line => {
           return {
             date: new Date(line[0]).getTime(),
@@ -90,6 +87,9 @@ function numbers (startDate, endDate) {
             powerball: parseInt(line[6], 10),
             powerplay: line[7] === '' ? null : parseInt(line[7], 10)
           }
+        })
+        .filter((line, i, a) => {
+          return line.date
         })
     })
     .then(winners => {
