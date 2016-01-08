@@ -234,8 +234,30 @@ function predict (count, startDate, endDate, newRules, cache) {
     })
 }
 
+// check if your array of 5 numbers is a winner
+function check (numbers, startDate, endDate, cache) {
+  numbers(startDate, endDate, newRules, cache)
+    .then(winners => {
+      var red = numbers.pop()
+      var white = numbers
+      var winning_draws = []
+      winners.forEach(winner => {
+        var foundWhite = false
+        numbers.forEach(num => {
+          if (winner.balls.index(num) !== -1) {
+            foundWhite = true
+          }
+        })
+        if (winner.powerball === red || foundWhite) {
+          winning_draws.push(winner)
+        }
+      })
+      return winning_draws
+    })
+}
+
 const σ = stddev
 const μ = mean
-const powerball = {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ, predict}
+const powerball = {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ, predict, check}
 
 export default powerball
