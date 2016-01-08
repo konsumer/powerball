@@ -235,15 +235,15 @@ function predict (count, startDate, endDate, newRules, cache) {
 }
 
 // check if your array of 5 numbers is a winner
-function check (numbers, startDate, endDate, newRules, cache) {
+function check (numbersToCheck, startDate, endDate, newRules, cache) {
   return numbers(startDate, endDate, newRules, cache)
     .then(winners => {
-      var red = numbers.pop()
-      var white = numbers
+      var red = numbersToCheck.pop()
+      var white = numbersToCheck
       var winning_draws = []
       winners.forEach(winner => {
         var foundWhite = false
-        numbers.forEach(num => {
+        numbersToCheck.forEach(num => {
           if (winner.balls.index(num) !== -1) {
             foundWhite = true
           }
