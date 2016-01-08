@@ -7,7 +7,7 @@
     "test": "standard && mocha --compilers js:babel-core/register test.js",
     "watch": "watch 'npm test' ./",
     "build": "babel index.js  --presets es2015 --plugins add-module-exports > lib.js",
-    "prepublish": "mversion patch && npm run build"
+    "prepublish": "mversion minor -m 'Bumped to v%s' --tag 'v%s' && npm run build"
   },
   "keywords": [
     "lottery",
