@@ -235,7 +235,7 @@ function predict (count, startDate, endDate, newRules, cache) {
 }
 
 // check if your array of 5 numbers is a winner
-function check (numbers, startDate, endDate, cache) {
+function check (numbers, startDate, endDate, newRules, cache) {
   numbers(startDate, endDate, newRules, cache)
     .then(winners => {
       var red = numbers.pop()
