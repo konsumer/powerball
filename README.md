@@ -14,7 +14,7 @@ My examples are all in ES6.
 I included the command `powerball`, if you install with `npm install -g powerball` that will predict numbers.
 
 ```
-Usage: powerball [options]
+Usage: powerball [options] [numbers]
 
 Options:
   -h, --help   Show help                                               [boolean]
@@ -27,6 +27,7 @@ Options:
 
 Examples:
   powerball -c 5 -s 10/1/1999  Get 5 numbers from 10/1/1999 to now
+  powerball 01 18 41 43 46 22  See if your numbers got pulled in last draw
 ```
 
 ### `numbers()`
@@ -70,7 +71,7 @@ powerball.frequencies(new Date('11/25/2015'), new Date('01/02/2016'))
 
 ### `predict()`
 
-This will simply give you some non-repeating random numbers, weighted by previous wins. You can optionallly  give it a `count` to get more than 1 number, and a `startDate` and `endDate`, just like `frequencies()` & `numbers()`. The 4th parameter is a boolean to enable new number-pool (default is true.)
+This will simply give you some non-repeating random numbers, weighted by previous wins. You can optionallly  give it a `count` to get more than 1 number, and a `startDate` and `endDate`, just like `frequencies()` & `numbers()`. The 4th parameter is a boolean `newRules` to enable new number-pool (default is true.)
 
 ```js
 powerball.predict()
@@ -84,6 +85,21 @@ powerball.predict(10, new Date('11/25/2015'), new Date('01/02/2016'))
   })
 ```
 
+### `check()`
+
+This will tell you if a set of numbers won, and how much. It has `startDate` and `endDate`, too, as well as `newRules` parameter.
+
+```js
+powerball.check([1, 18, 41, 43, 46, 22])
+  .then(winningInfo => {
+    console.log(winningInfo)
+  })
+
+powerball.check([1, 18, 41, 43, 46, 22], new Date('11/25/2015'), new Date('01/02/2016'))
+  .then(winningInfo => {
+    console.log(winningInfo)
+  })
+```
 
 ### statistical analysis
 

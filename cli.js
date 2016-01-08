@@ -2,7 +2,7 @@
 var powerball = require(__dirname + '/lib.js')
 
 var argv = require('yargs')
-  .usage('Usage: $0 [options]')
+  .usage('Usage: $0 [options] [numbers]')
 
   .default('c', 10)
   .alias('count', 'c')
@@ -22,6 +22,7 @@ var argv = require('yargs')
   .alias('h', 'help')
 
   .example('$0 -c 5 -s 10/1/1999', 'Get 5 numbers from 10/1/1999 to now')
+  .example('$0 01 18 41 43 46 22', 'See if your numbers got pulled in last draw')
 
   .argv
 
@@ -34,23 +35,29 @@ function pad (n, width, z) {
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
 }
 
-powerball.predict(argv.count, startDate, endDate, !argv.old)
-  .then(function (predictions) {
-    if (predictions.length && predictions[0].length) {
-      console.log(
-        predictions.map(function (p) {
-          return p.map(function (v) {
+if (argv._.length === 0) {
+  powerball.predict(argv.count, startDate, endDate, !argv.old)
+    .then(function (predictions) {
+      if (predictions.length && predictions[0].length) {
+        console.log(
+          predictions.map(function (p) {
+            return p.map(function (v) {
+              return pad(v, 2)
+            }).join(' ')
+          })
+          .join('\n')
+        )
+      } else {
+        console.log(
+          predictions.map(function (v) {
             return pad(v, 2)
           }).join(' ')
-        })
-        .join('\n')
-      )
-    } else {
-      console.log(
-        predictions.map(function (v) {
-          return pad(v, 2)
-        }).join(' ')
-      )
-    }
-  })
-
+        )
+      }
+    })
+} else {
+  powerball.check(argv._, startDate, endDate, !argv.old)
+    .then(function (info) {
+      console.log(info)
+    })
+}
