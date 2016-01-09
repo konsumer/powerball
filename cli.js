@@ -38,22 +38,18 @@ function pad (n, width, z) {
 if (argv._.length === 0) {
   powerball.predict(argv.count, startDate, endDate, !argv.old)
     .then(function (predictions) {
-      if (predictions.length && predictions[0].length) {
-        console.log(
-          predictions.map(function (p) {
-            return p.map(function (v) {
-              return pad(v, 2)
-            }).join(' ')
-          })
-          .join('\n')
-        )
-      } else {
-        console.log(
-          predictions.map(function (v) {
-            return pad(v, 2)
-          }).join(' ')
-        )
+      if (argv.count === 1) {
+        predictions = [predictions]
       }
+      console.log(predictions.map(function (p) {
+        p = p.map(function (n) {
+          return pad(n, 2)
+        })
+        var red = p.pop()
+        p.sort()
+        p.push(red)
+        return p.join(' ')
+      }).join('\n'))
     })
 } else {
   powerball.check(argv._, startDate, endDate, !argv.old)
