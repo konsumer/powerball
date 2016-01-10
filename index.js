@@ -36,7 +36,9 @@ const ballMatrix = {
  * ```js
  * // returns [69, 26]
  * powerball.balls()
+ * ```
  * @example <caption>Old Ball Maxes</caption>
+ * ```js
  * // returns [59, 39]
  * powerball.balls(new Date('1/8/2009'))
  * ```

@@ -170,7 +170,9 @@ Get ball-maxes for a given date
 ```js
 // returns [69, 26]
 powerball.balls()
+```
 **Example** *(Old Ball Maxes)*  
+```js
 // returns [59, 39]
 powerball.balls(new Date('1/8/2009'))
 ```
