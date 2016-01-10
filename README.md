@@ -47,7 +47,7 @@ Examples:
 -
 
 <a name="Statistical.μ"></a>
-### Statistical.μ(freq) ⇒ <code>Number</code>
+### powerball.μ(freq) ⇒ <code>Number</code>
 Calculate arithmetic mean of ball-count
 
 **Kind**: static method of <code>[Statistical](#Statistical)</code>  
@@ -58,19 +58,15 @@ Calculate arithmetic mean of ball-count
 | freq | <code>Object</code> | A single ball-frequency array from [frequencies](#Powerball.frequencies) |
 
 **Example** *(Get Arithmetic Mean of Red Balls)*  
-```js
 var f = powerball.frequencies(winners)
 console.log(powerball.μ(f.red))
-```
 **Example** *(Get Arithmetic Mean of White Balls)*  
-```js
 console.log(powerball.mean(f.white))
-```
 
 -
 
 <a name="Statistical.gmean"></a>
-### Statistical.gmean(freq) ⇒ <code>Number</code>
+### powerball.gmean(freq) ⇒ <code>Number</code>
 Calculate geometric mean of ball-count
 
 **Kind**: static method of <code>[Statistical](#Statistical)</code>  
@@ -81,19 +77,15 @@ Calculate geometric mean of ball-count
 | freq | <code>Object</code> | A single ball-frequency array from [frequencies](#Powerball.frequencies) |
 
 **Example** *(Get Geometric Mean of Red Balls)*  
-```js
 var f = powerball.frequencies(winners)
 console.log(powerball.gmean(f.red))
-```
 **Example** *(Get Geometric Mean of White Balls)*  
-```js
 console.log(powerball.gmean(f.white))
-```
 
 -
 
 <a name="Statistical.median"></a>
-### Statistical.median(freq) ⇒ <code>Number</code>
+### powerball.median(freq) ⇒ <code>Number</code>
 Calculate median of ball-count
 
 **Kind**: static method of <code>[Statistical](#Statistical)</code>  
@@ -104,19 +96,15 @@ Calculate median of ball-count
 | freq | <code>Object</code> | A single ball-frequency array from [frequencies](#Powerball.frequencies) |
 
 **Example** *(Get Median of Red Balls)*  
-```js
 var f = powerball.frequencies(winners)
 console.log(powerball.median(f.red))
-```
 **Example** *(Get Median of White Balls)*  
-```js
 console.log(powerball.median(f.white))
-```
 
 -
 
 <a name="Statistical.range"></a>
-### Statistical.range(freq) ⇒ <code>Array</code>
+### powerball.range(freq) ⇒ <code>Array</code>
 Calculate range of ball-count
 
 **Kind**: static method of <code>[Statistical](#Statistical)</code>  
@@ -127,19 +115,15 @@ Calculate range of ball-count
 | freq | <code>Object</code> | A single ball-frequency array from [frequencies](#Powerball.frequencies) |
 
 **Example** *(Get Range of Red Balls)*  
-```js
 var f = powerball.frequencies(winners)
 console.log(powerball.range(f.red))
-```
 **Example** *(Get Range of White Balls)*  
-```js
 console.log(powerball.range(f.white))
-```
 
 -
 
 <a name="Statistical.σ"></a>
-### Statistical.σ(freq) ⇒ <code>Number</code>
+### powerball.σ(freq) ⇒ <code>Number</code>
 Calculate standard deviation of ball-count
 
 **Kind**: static method of <code>[Statistical](#Statistical)</code>  
@@ -150,14 +134,10 @@ Calculate standard deviation of ball-count
 | freq | <code>Object</code> | A single ball-frequency array from [frequencies](#Powerball.frequencies) |
 
 **Example** *(Get Standard Deviation of Red Balls)*  
-```js
 var f = powerball.frequencies(winners)
 console.log(powerball.stddev(f.red))
-```
 **Example** *(Get Standard Deviation of White Balls)*  
-```js
 console.log(powerball.σ(f.white))
-```
 
 -
 
@@ -176,7 +156,7 @@ console.log(powerball.σ(f.white))
 -
 
 <a name="Powerball.balls"></a>
-### Powerball.balls([date]) ⇒ <code>Array</code>
+### powerball.balls([date]) ⇒ <code>Array</code>
 Get ball-maxes for a given date
 
 **Kind**: static method of <code>[Powerball](#Powerball)</code>  
@@ -187,35 +167,29 @@ Get ball-maxes for a given date
 | [date] | <code>Date</code> | <code>now</code> | Date to check |
 
 **Example** *(Current Ball Maxes)*  
-```js
 // returns [69, 26]
 powerball.balls()
-```
 **Example** *(Old Ball Maxes)*  
-```js
 // returns [59, 39]
 powerball.balls(new Date('1/8/2009'))
-```
 
 -
 
 <a name="Powerball.numbers"></a>
-### Powerball.numbers() ⇒ <code>Promise</code>
+### powerball.numbers() ⇒ <code>Promise</code>
 Get past winning numbers
 
 **Kind**: static method of <code>[Powerball](#Powerball)</code>  
 **Returns**: <code>Promise</code> - Resolves to array of winner objects  
 **Example** *(Get Current Numbers)*  
-```js
 powerball.numbers().then(winners => {
   console.log(winners)
 })
-```
 
 -
 
 <a name="Powerball.frequencies"></a>
-### Powerball.frequencies(winners) ⇒ <code>Object</code>
+### powerball.frequencies(winners) ⇒ <code>Object</code>
 Calculate frequencies of white & red balls
 
 **Kind**: static method of <code>[Powerball](#Powerball)</code>  
@@ -226,14 +200,12 @@ Calculate frequencies of white & red balls
 | winners | <code>Array</code> | The winning numbers from  [numbers](#Powerball.numbers) |
 
 **Example** *(Get Frequency Counts)*  
-```js
 console.log(powerball.frequencies(winners))
-```
 
 -
 
 <a name="Powerball.predict"></a>
-### Powerball.predict(white, red, [time]) ⇒ <code>Array</code>
+### powerball.predict(white, red, [time]) ⇒ <code>Array</code>
 Predict winning numbers
 
 **Kind**: static method of <code>[Powerball](#Powerball)</code>  
@@ -246,19 +218,15 @@ Predict winning numbers
 | [time] | <code>Date</code> | <code>now</code> | Different dates have differnt ball-sets |
 
 **Example** *(Get Prediction)*  
-```js
 var f = powerball.frequencies(winners)
 console.log(powerball.predict(f.white, f.red))
-```
 **Example** *(Predict For an Old Date)*  
-```js
 console.log(powerball.predict(f.white, f.red, new Date('1/1/98')))
-```
 
 -
 
 <a name="Powerball.payout"></a>
-### Powerball.payout(pick, winner, powerplay) ⇒ <code>Boolean</code> &#124; <code>Number</code>
+### powerball.payout(pick, winner, powerplay) ⇒ <code>Boolean</code> &#124; <code>Number</code>
 Check if your numbers won (only current rules)
 [http://www.powerball.com/powerball/pb_prizes.asp](http://www.powerball.com/powerball/pb_prizes.asp)
 
@@ -272,11 +240,9 @@ Check if your numbers won (only current rules)
 | powerplay | <code>Boolean</code> | Did you mark power-play on your ticket? |
 
 **Example** *(Check If You Won)*  
-```js
 powerball.numbers().then(winners => {
   console.log(powerbal.payout([5, 6, 10, 36, 43, 11], winners.pop(), true))
 })
-```
 
 -
 

@@ -2,8 +2,14 @@ import fetch from 'node-fetch'
 import { Stats } from 'fast-stats'
 import _ from 'lodash'
 
-/** @namespace Statistical */
-/** @namespace Powerball */
+/**
+ * @namespace Statistical
+ * @typicalname powerball
+ */
+/**
+ * @namespace Powerball
+ * @typicalname powerball
+ */
 
 /**
  * All possible white/red balls for different datestamps
