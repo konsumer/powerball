@@ -14,10 +14,9 @@ Usage: powerball [options] [numbers]
 
 Options:
   -h, --help       Show help                                           [boolean]
-  --count, -c      Count of number sets to return.                 [default: 10]
-  --powerplay, -p  For checking: did you enable powerplay?             [boolean]
-  --time, -t       What time should the rules be pulled from?
-                                           [default: now]
+  --count, -c      Count of number sets to return.              [default: 10]
+  --powerplay, -p  For checking: did you enable powerplay?      [boolean]
+  --time, -t       What time should the rules be pulled from?   [default: now]
 
 Examples:
   powerball -c 5               Get 5 numbersto play
