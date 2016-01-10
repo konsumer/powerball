@@ -2,9 +2,13 @@ import fetch from 'node-fetch'
 import { Stats } from 'fast-stats'
 import _ from 'lodash'
 
+/** @namespace Statistical */
+/** @namespace Powerball */
+
 /**
  * All possible white/red balls for different datestamps
  * @type {Object}
+ * @private
  */
 const ballMatrix = {
   0: [45, 45],
@@ -19,8 +23,15 @@ const ballMatrix = {
 
 /**
  * Get ball-maxes for a given date
- * @param  {Date} date  Date to check [now]
- * @return {Array}      white, red ball-max
+ * @param  {Date} [date=now] Date to check
+ * @return {Array}           white, red ball-max
+ * @memberof Powerball
+ * @example <caption>Current Ball Maxes</caption>
+ * // returns [69, 26]
+ * powerball.balls()
+ * @example <caption>Old Ball Maxes</caption>
+ * // returns [59, 39]
+ * powerball.balls(new Date('1/8/2009'))
  */
 function balls (date) {
   date = date || new Date()
@@ -34,19 +45,21 @@ function balls (date) {
 }
 
 /**
- * PRIVATE: shorthand for ranged random
+ * Shorthand for ranged random
  * @param  {Number} min Min possible value
  * @param  {Number} max Max possible value
  * @return {Number}     Value
+ * @private
  */
 function rand (min, max) {
   return Math.random() * (max - min) + min
 }
 
 /**
- * PRIVATE: get a random item from frequency pool, weighted by the number of times drawn
- * @param  {Object} freq   A single ball-frequency array from `frequency()`
+ * Get a random item from frequency pool, weighted by the number of times drawn
+ * @param  {Object} freq   A single ball-frequency array from {@link Powerball.frequencies}
  * @return {Number}        pick
+ * @private
  */
 function getWeightedRandomItem (freq) {
   var list = _.keys(freq)
@@ -68,6 +81,11 @@ function getWeightedRandomItem (freq) {
 /**
  * Get past winning numbers
  * @return {Promise}       Resolves to array of winner objects
+ * @memberof Powerball
+ * @example <caption>Get Current Numbers</caption>
+ * powerball.numbers().then(winners => {
+ *   console.log(winners)
+ * })
  */
 function numbers () {
   return fetch('http://www.powerball.com/powerball/winnums-text.txt')
@@ -104,8 +122,11 @@ function numbers () {
 
 /**
  * Calculate frequencies of white & red balls
- * @param  {Array} winners  The winning numbers from  `numbers()`
+ * @param  {Array} winners  The winning numbers from  {@link Powerball.numbers}
  * @return {Object}         keyed with number, value is frequency
+ * @memberof Powerball
+ * @example <caption>Get Frequency Counts</caption>
+ * console.log(powerball.frequencies(winners))
  */
 function frequencies (winners) {
   var out = {white: {}, red: {}}
@@ -120,8 +141,15 @@ function frequencies (winners) {
 
 /**
  * Calculate arithmetic mean of ball-count
- * @param  {Object} freq  A single ball-frequency array from `frequency()`
+ * @param  {Object} freq  A single ball-frequency array from {@link Powerball.frequencies}
  * @return {Number}      Arithmatic Mean of weights
+ * @memberof Statistical
+ * @alias μ
+ * @example <caption>Get Arithmetic Mean of Red Balls</caption>
+ * var f = powerball.frequencies(winners)
+ * console.log(powerball.μ(f.red))
+ * @example <caption>Get Arithmetic Mean of White Balls</caption>
+ * console.log(powerball.mean(f.white))
  */
 function mean (freq) {
   var s1 = new Stats().push(_.values(freq))
@@ -130,8 +158,14 @@ function mean (freq) {
 
 /**
  * Calculate geometric mean of ball-count
- * @param  {Object} freq  A single ball-frequency array from `frequency()`
+ * @param  {Object} freq  A single ball-frequency array from {@link Powerball.frequencies}
  * @return {Number}      Geometric Mean of weights
+ * @memberof Statistical
+ * @example <caption>Get Geometric Mean of Red Balls</caption>
+ * var f = powerball.frequencies(winners)
+ * console.log(powerball.gmean(f.red))
+ * @example <caption>Get Geometric Mean of White Balls</caption>
+ * console.log(powerball.gmean(f.white))
  */
 function gmean (freq) {
   var s1 = new Stats().push(_.values(freq))
@@ -140,8 +174,14 @@ function gmean (freq) {
 
 /**
  * Calculate median of ball-count
- * @param  {Object} freq  A single ball-frequency array from `frequency()`
+ * @param  {Object} freq  A single ball-frequency array from {@link Powerball.frequencies}
  * @return {Number}      Median of weights
+ * @memberof Statistical
+ * @example <caption>Get Median of Red Balls</caption>
+ * var f = powerball.frequencies(winners)
+ * console.log(powerball.median(f.red))
+ * @example <caption>Get Median of White Balls</caption>
+ * console.log(powerball.median(f.white))
  */
 function median (freq) {
   var s1 = new Stats().push(_.values(freq))
@@ -150,8 +190,14 @@ function median (freq) {
 
 /**
  * Calculate range of ball-count
- * @param  {Object} freq  A single ball-frequency array from `frequency()`
+ * @param  {Object} freq  A single ball-frequency array from {@link Powerball.frequencies}
  * @return {Array}       High/low range of numbers for weights.
+ * @memberof Statistical
+ * @example <caption>Get Range of Red Balls</caption>
+ * var f = powerball.frequencies(winners)
+ * console.log(powerball.range(f.red))
+ * @example <caption>Get Range of White Balls</caption>
+ * console.log(powerball.range(f.white))
  */
 function range (freq) {
   var s1 = new Stats().push(_.values(freq))
@@ -160,8 +206,15 @@ function range (freq) {
 
 /**
  * Calculate standard deviation of ball-count
- * @param  {Object} freq   A single ball-frequency array from `frequency()`
+ * @param  {Object} freq   A single ball-frequency array from {@link Powerball.frequencies}
  * @return {Number}       Standard Deviation of weights
+ * @memberof Statistical
+ * @alias σ
+ * @example <caption>Get Standard Deviation of Red Balls</caption>
+ * var f = powerball.frequencies(winners)
+ * console.log(powerball.stddev(f.red))
+ * @example <caption>Get Standard Deviation of White Balls</caption>
+ * console.log(powerball.σ(f.white))
  */
 function stddev (freq) {
   var s1 = new Stats().push(_.values(freq))
@@ -170,10 +223,16 @@ function stddev (freq) {
 
 /**
  * Predict winning numbers
- * @param  {Object}  white     White ball-frequency array from `frequency()`
- * @param  {Object}  red       Red ball-frequency array from `frequency()`
- * @param  {Date}    time      Different dates have differnt ball-sets [now]
- * @return {Array}             The numbers you should play
+ * @param  {Object}  white      White ball-frequency array from {@link Powerball.frequencies}
+ * @param  {Object}  red        Red ball-frequency array from {@link Powerball.frequencies}
+ * @param  {Date}    [time=now] Different dates have differnt ball-sets
+ * @return {Array}              The numbers you should play
+ * @memberof Powerball
+ * @example <caption>Get Prediction</caption>
+ * var f = powerball.frequencies(winners)
+ * console.log(powerball.predict(f.white, f.red))
+ * @example <caption>Predict For an Old Date</caption>
+ * console.log(powerball.predict(f.white, f.red, new Date('1/1/98')))
  */
 function predict (white, red, time) {
   time = time || new Date()
@@ -193,18 +252,22 @@ function predict (white, red, time) {
     out.push(newWhite)
     delete white[newWhite]
   }
-  out.sort((a, b) => { return a - b })
   out.push(getWeightedRandomItem(red))
   return out
 }
 
 /**
  * Check if your numbers won (only current rules)
- * http://www.powerball.com/powerball/pb_prizes.asp
+ * {@link http://www.powerball.com/powerball/pb_prizes.asp}
  * @param  {Array}   pick      Your number picks (6-length array)
  * @param  {Object}  winner    A single draw from `number()`
  * @param  {Boolean} powerplay Did you mark power-play on your ticket?
  * @return {Boolean|Number}    true for jackpot, if Number: amount you won
+ * @memberof Powerball
+ * @example <caption>Check If You Won</caption>
+ * powerball.numbers().then(winners => {
+ *   console.log(powerbal.payout([5, 6, 10, 36, 43, 11], winners.pop(), true))
+ * })
  */
 function payout (pick, winner, powerplay) {
   pick = pick.map(Number)

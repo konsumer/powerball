@@ -7,8 +7,6 @@ See it in action [here](https://tonicdev.com/konsumer/powerball)
 
 ## usage
 
-My examples are all in ES6.
-
 ### command-line
 
 I included the command `powerball`, if you install with `npm install -g powerball` that will predict numbers.
@@ -17,160 +15,235 @@ I included the command `powerball`, if you install with `npm install -g powerbal
 Usage: powerball [options] [numbers]
 
 Options:
-  -h, --help   Show help                                               [boolean]
-  --count, -c  Count of number sets to return. The pools are limited, so it's
-               wise to keep this under 13 or so.                   [default: 10]
-  --start, -s  the start-date to look at numbers. Format: DD/MM/YYYY
-  --end, -e    the end-date to look at numbers. Format: DD/MM/YYYY
-  --old, -o    In October 2015, the pools of numbers changed. This forces the
-               old number-set.                                         [boolean]
+  -h, --help       Show help                                           [boolean]
+  --count, -c      Count of number sets to return.                 [default: 10]
+  --powerplay, -p  For checking: did you enable powerplay?             [boolean]
+  --time, -t       What time should the rules be pulled from?
+                                           [default: "2016-01-10T23:26:22.323Z"]
 
 Examples:
-  powerball -c 5 -s 10/1/1999  Get 5 numbers from 10/1/1999 to now
+  powerball -c 5               Get 5 numbersto play
   powerball 01 18 41 43 46 22  See if your numbers got pulled in last draw
 ```
 
-### `numbers()`
+## Objects
 
-Get all the Powerball numbers that have won. Optionally, use a date-range. It returns a promise.
+<dl>
+<dt><a href="#Statistical">Statistical</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#Powerball">Powerball</a> : <code>object</code></dt>
+<dd></dd>
+</dl>
 
+<a name="Statistical"></a>
+## Statistical : <code>object</code>
+**Kind**: global namespace  
+
+* [Statistical](#Statistical) : <code>object</code>
+    * [.μ(freq)](#Statistical.μ) ⇒ <code>Number</code>
+    * [.gmean(freq)](#Statistical.gmean) ⇒ <code>Number</code>
+    * [.median(freq)](#Statistical.median) ⇒ <code>Number</code>
+    * [.range(freq)](#Statistical.range) ⇒ <code>Array</code>
+    * [.σ(freq)](#Statistical.σ) ⇒ <code>Number</code>
+
+<a name="Statistical.μ"></a>
+### Statistical.μ(freq) ⇒ <code>Number</code>
+Calculate arithmetic mean of ball-count
+
+**Kind**: static method of <code>[Statistical](#Statistical)</code>  
+**Returns**: <code>Number</code> - Arithmatic Mean of weights  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| freq | <code>Object</code> | A single ball-frequency array from [frequencies](#Powerball.frequencies) |
+
+**Example** *(Get Arithmetic Mean of Red Balls)*  
 ```js
-import powerball from 'powerball'
-
-powerball.numbers()
-  .then((numbers) => {
-    console.log(numbers)
-  })
-
-// for date-range:
-powerball.numbers(new Date('11/25/2015'), new Date('01/02/2016'))
-  .then((numbers) => {
-    console.log(numbers)
-  })
+var f = powerball.frequencies(winners)
+console.log(powerball.μ(f.red))
 ```
-
-### `frequencies()`
-
-Get the frequencies that numbers occur, Optionally use a date-range. Returns white & red balls seperately, in an array. It returns a promise.
-
+**Example** *(Get Arithmetic Mean of White Balls)*  
 ```js
-powerball.frequencies()
-  .then((freq) => {
-    console.log('white balls:', freq[0])
-    console.log('red balls:', freq[1])
-  })
-
-// for date-range:
-powerball.frequencies(new Date('11/25/2015'), new Date('01/02/2016'))
-  .then((freq) => {
-    console.log('white balls:', freq[0])
-    console.log('red balls:', freq[1])
-  })
-
+console.log(powerball.mean(f.white))
 ```
+<a name="Statistical.gmean"></a>
+### Statistical.gmean(freq) ⇒ <code>Number</code>
+Calculate geometric mean of ball-count
 
-### `predict()`
+**Kind**: static method of <code>[Statistical](#Statistical)</code>  
+**Returns**: <code>Number</code> - Geometric Mean of weights  
 
-This will simply give you some non-repeating random numbers, weighted by previous wins. You can optionallly  give it a `count` to get more than 1 number, and a `startDate` and `endDate`, just like `frequencies()` & `numbers()`. The 4th parameter is a boolean `newRules` to enable new number-pool (default is true.)
+| Param | Type | Description |
+| --- | --- | --- |
+| freq | <code>Object</code> | A single ball-frequency array from [frequencies](#Powerball.frequencies) |
 
+**Example** *(Get Geometric Mean of Red Balls)*  
 ```js
-powerball.predict()
-  .then(prediction => {
-    console.log(prediction)
-  })
-
-powerball.predict(10, new Date('11/25/2015'), new Date('01/02/2016'))
-  .then(predictions => {
-    console.log(predictions)
-  })
+var f = powerball.frequencies(winners)
+console.log(powerball.gmean(f.red))
 ```
-
-### `check()`
-
-This will tell you if a set of numbers won, and how much. It has `startDate` and `endDate`, too, as well as `newRules` parameter.
-
+**Example** *(Get Geometric Mean of White Balls)*  
 ```js
-powerball.check([1, 18, 41, 43, 46, 22])
-  .then(winningInfo => {
-    console.log(winningInfo)
-  })
-
-powerball.check([1, 18, 41, 43, 46, 22], new Date('11/25/2015'), new Date('01/02/2016'))
-  .then(winningInfo => {
-    console.log(winningInfo)
-  })
+console.log(powerball.gmean(f.white))
 ```
+<a name="Statistical.median"></a>
+### Statistical.median(freq) ⇒ <code>Number</code>
+Calculate median of ball-count
 
-### statistical analysis
+**Kind**: static method of <code>[Statistical](#Statistical)</code>  
+**Returns**: <code>Number</code> - Median of weights  
 
-Several statistical analysis methods are included to make rolling your own number-picker easier.
+| Param | Type | Description |
+| --- | --- | --- |
+| freq | <code>Object</code> | A single ball-frequency array from [frequencies](#Powerball.frequencies) |
 
-#### `mean()`
-
-Calculate the arithmatic mean from a list of frequencies.
-
-The arithmetic mean is calculated as the sum of all data points divided by the number of data points.  This is useful for data sets that are fairly uniform, following a linear or binomial distribution.  Use the `amean()` method or the `μ()` method to get at it:
-
+**Example** *(Get Median of Red Balls)*  
 ```js
-powerball.frequencies()
-  .then((freq) => {
-    console.log('white balls:', powerball.mean(freq[0]))
-    console.log('red balls:', powerball.mean(freq[1]))
-  })
+var f = powerball.frequencies(winners)
+console.log(powerball.median(f.red))
 ```
-
-#### `gmean()`
-
-Calculate the geometric mean from a list of frequencies.
-
-The geometric mean is the `n`th root of the product of all data points where n is the number of data points. This is useful for data sets that follow an exponential or log-normal distribution.  Use the `gmean()` method to get at it:
-
+**Example** *(Get Median of White Balls)*  
 ```js
-powerball.frequencies()
-  .then((freq) => {
-    console.log('white balls:', powerball.gmean(freq[0]))
-    console.log('red balls:', powerball.gmean(freq[1]))
-  })
+console.log(powerball.median(f.white))
 ```
+<a name="Statistical.range"></a>
+### Statistical.range(freq) ⇒ <code>Array</code>
+Calculate range of ball-count
 
-#### `median()`
+**Kind**: static method of <code>[Statistical](#Statistical)</code>  
+**Returns**: <code>Array</code> - High/low range of numbers for weights.  
 
-Calculate the median from a list of frequencies.
+| Param | Type | Description |
+| --- | --- | --- |
+| freq | <code>Object</code> | A single ball-frequency array from [frequencies](#Powerball.frequencies) |
 
-The median is the middle point of the dataset when sorted in ascending order.  This is useful if your dataset has a lot of outliers and noise that would not normally be found in a complete population.  Use the `median()` method to get at it:
-
+**Example** *(Get Range of Red Balls)*  
 ```js
-powerball.frequencies()
-  .then((freq) => {
-    console.log('white balls:', powerball.median(freq[0]))
-    console.log('red balls:', powerball.median(freq[1]))
-  })
+var f = powerball.frequencies(winners)
+console.log(powerball.range(f.red))
 ```
-
-#### `range()`
-
-Calculate the range of values from a list of frequencies.
-
-The `range()` method tells you the minimum and maximum values of your data set.  It returns an array of two values.  The first is the lower bound and the second is the upper bound.
-
+**Example** *(Get Range of White Balls)*  
 ```js
-powerball.frequencies()
-  .then((freq) => {
-    console.log('white balls:', powerball.range(freq[0]))
-    console.log('red balls:', powerball.range(freq[1]))
-  })
+console.log(powerball.range(f.white))
 ```
+<a name="Statistical.σ"></a>
+### Statistical.σ(freq) ⇒ <code>Number</code>
+Calculate standard deviation of ball-count
 
-#### `stddev()`
+**Kind**: static method of <code>[Statistical](#Statistical)</code>  
+**Returns**: <code>Number</code> - Standard Deviation of weights  
 
-Calculate the standard deviatation from a list of frequencies.
+| Param | Type | Description |
+| --- | --- | --- |
+| freq | <code>Object</code> | A single ball-frequency array from [frequencies](#Powerball.frequencies) |
 
-This tells you the spread of your data if it follows a normal (or close to normal) distribution, ie, the bell curve. Use the `stddev()` method or the `σ()` method to get at it.
-
+**Example** *(Get Standard Deviation of Red Balls)*  
 ```js
-powerball.frequencies()
-  .then((freq) => {
-    console.log('white balls:', powerball.stddev(freq[0]))
-    console.log('red balls:', powerball.stddev(freq[1]))
-  })
+var f = powerball.frequencies(winners)
+console.log(powerball.stddev(f.red))
+```
+**Example** *(Get Standard Deviation of White Balls)*  
+```js
+console.log(powerball.σ(f.white))
+```
+<a name="Powerball"></a>
+## Powerball : <code>object</code>
+**Kind**: global namespace  
+
+* [Powerball](#Powerball) : <code>object</code>
+    * [.balls([date])](#Powerball.balls) ⇒ <code>Array</code>
+    * [.numbers()](#Powerball.numbers) ⇒ <code>Promise</code>
+    * [.frequencies(winners)](#Powerball.frequencies) ⇒ <code>Object</code>
+    * [.predict(white, red, [time])](#Powerball.predict) ⇒ <code>Array</code>
+    * [.payout(pick, winner, powerplay)](#Powerball.payout) ⇒ <code>Boolean</code> &#124; <code>Number</code>
+
+<a name="Powerball.balls"></a>
+### Powerball.balls([date]) ⇒ <code>Array</code>
+Get ball-maxes for a given date
+
+**Kind**: static method of <code>[Powerball](#Powerball)</code>  
+**Returns**: <code>Array</code> - white, red ball-max  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [date] | <code>Date</code> | <code>now</code> | Date to check |
+
+**Example** *(Current Ball Maxes)*  
+```js
+// returns [69, 26]
+powerball.balls()
+```
+**Example** *(Old Ball Maxes)*  
+```js
+// returns [59, 39]
+powerball.balls(new Date('1/8/2009'))
+```
+<a name="Powerball.numbers"></a>
+### Powerball.numbers() ⇒ <code>Promise</code>
+Get past winning numbers
+
+**Kind**: static method of <code>[Powerball](#Powerball)</code>  
+**Returns**: <code>Promise</code> - Resolves to array of winner objects  
+**Example** *(Get Current Numbers)*  
+```js
+powerball.numbers().then(winners => {
+  console.log(winners)
+})
+```
+<a name="Powerball.frequencies"></a>
+### Powerball.frequencies(winners) ⇒ <code>Object</code>
+Calculate frequencies of white & red balls
+
+**Kind**: static method of <code>[Powerball](#Powerball)</code>  
+**Returns**: <code>Object</code> - keyed with number, value is frequency  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| winners | <code>Array</code> | The winning numbers from  [numbers](#Powerball.numbers) |
+
+**Example** *(Get Frequency Counts)*  
+```js
+console.log(powerball.frequencies(winners))
+```
+<a name="Powerball.predict"></a>
+### Powerball.predict(white, red, [time]) ⇒ <code>Array</code>
+Predict winning numbers
+
+**Kind**: static method of <code>[Powerball](#Powerball)</code>  
+**Returns**: <code>Array</code> - The numbers you should play  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| white | <code>Object</code> |  | White ball-frequency array from [frequencies](#Powerball.frequencies) |
+| red | <code>Object</code> |  | Red ball-frequency array from [frequencies](#Powerball.frequencies) |
+| [time] | <code>Date</code> | <code>now</code> | Different dates have differnt ball-sets |
+
+**Example** *(Get Prediction)*  
+```js
+var f = powerball.frequencies(winners)
+console.log(powerball.predict(f.white, f.red))
+```
+**Example** *(Predict For an Old Date)*  
+```js
+console.log(powerball.predict(f.white, f.red, new Date('1/1/98')))
+```
+<a name="Powerball.payout"></a>
+### Powerball.payout(pick, winner, powerplay) ⇒ <code>Boolean</code> &#124; <code>Number</code>
+Check if your numbers won (only current rules)
+[http://www.powerball.com/powerball/pb_prizes.asp](http://www.powerball.com/powerball/pb_prizes.asp)
+
+**Kind**: static method of <code>[Powerball](#Powerball)</code>  
+**Returns**: <code>Boolean</code> &#124; <code>Number</code> - true for jackpot, if Number: amount you won  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| pick | <code>Array</code> | Your number picks (6-length array) |
+| winner | <code>Object</code> | A single draw from `number()` |
+| powerplay | <code>Boolean</code> | Did you mark power-play on your ticket? |
+
+**Example** *(Check If You Won)*  
+```js
+powerball.numbers().then(winners => {
+  console.log(powerbal.payout([5, 6, 10, 36, 43, 11], winners.pop(), true))
+})
 ```

@@ -1,5 +1,9 @@
 #!/usr/bin/env node
+var moment = require('moment')
+
 var powerball = require(__dirname + '/lib.js')
+
+var now = new Date()
 
 var argv = require('yargs')
   .usage('Usage: $0 [options] [numbers]')
@@ -12,7 +16,7 @@ var argv = require('yargs')
   .alias('powerplay', 'p')
   .describe('p', 'For checking: did you enable powerplay?')
 
-  .default('t', new Date())
+  .default('t', now)
   .alias('time', 't')
   .describe('t', 'What time should the rules be pulled from?')
 
@@ -41,8 +45,11 @@ powerball.numbers()
         console.log(predictions.join(' ') + ' ' + red)
       }
     } else {
-      var payout = powerball.payout(argv._, winners.pop(), argv.powerplay)
-      console.log('According to the draw on ' + new Date(payout.drawn.date) + ' (' + payout.drawn.white.join(' ') + ' ' + payout.drawn.red + ' - ' + payout.drawn.powerplay + 'x )')
+      var winner = winners.pop()
+      // TODO: use argv.time to find the right winner for any time, find payout rules for that
+      var payout = powerball.payout(argv._, winner, argv.powerplay)
+      var d = moment(payout.drawn.date)
+      console.log('According to the draw on ' + d.format('dddd, MMM Do, YYYY') + ' ( ' + payout.drawn.white.join(' ') + ' ' + payout.drawn.red + ' - ' + payout.drawn.powerplay + 'x )')
       console.log('You have ' + payout.winning_white.length + ' matching white numbers and ' + (payout.red_match ? 1 : 0) + ' red matches. You should get paid $' + payout.pay + '.')
     }
   })
