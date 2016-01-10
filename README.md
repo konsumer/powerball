@@ -5,9 +5,7 @@ My attempt at predicting Powerball numbers with nodejs
 
 See it in action [here](https://tonicdev.com/konsumer/powerball)
 
-## usage
-
-### command-line
+## command-line
 
 I included the command `powerball`, if you install with `npm install -g powerball` that will predict numbers.
 
