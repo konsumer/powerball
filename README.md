@@ -167,11 +167,13 @@ Get ball-maxes for a given date
 | [date] | <code>Date</code> | <code>now</code> | Date to check |
 
 **Example** *(Current Ball Maxes)*  
+```js
 // returns [69, 26]
 powerball.balls()
 **Example** *(Old Ball Maxes)*  
 // returns [59, 39]
 powerball.balls(new Date('1/8/2009'))
+```
 
 -
 
