@@ -8,7 +8,7 @@
     "watch": "watch 'npm test' ./",
     "build": "babel index.js  --presets es2015 --plugins add-module-exports > lib.js",
     "prepublish": "mversion minor -m 'Bumped to v%s' --tag 'v%s' && npm run build",
-    "doc": "jsdoc2md --separators --name-format  -t README-template.md index.js > README.md"
+    "doc": "jsdoc2md --separators -t README-template.md index.js > README.md"
   },
   "keywords": [
     "lottery",
