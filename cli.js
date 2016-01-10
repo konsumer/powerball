@@ -12,9 +12,9 @@ var argv = require('yargs')
   .alias('powerplay', 'p')
   .describe('p', 'For checking: did you enable powerplay?')
 
-  .boolean('o')
-  .alias('old', 'o')
-  .describe('o', 'In October 2015, the pools of numbers changed. This forces the old number-set.')
+  .default('t', new Date())
+  .alias('time', 't')
+  .describe('t', 'What time should the rules be pulled from?')
 
   .help('h')
   .alias('h', 'help')
@@ -30,16 +30,20 @@ function pad (n, width, z) {
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
 }
 
-powerball.numbers().then(function (winners) {
-  if (argv._.length === 0) {
-    var freq = powerball.frequencies(winners)
-    for (var i = 0; i < argv.count; i++) {
-      console.log(i)
-      // console.log(powerball.predict(freq.white, freq.red, !argv.old))
+powerball.numbers()
+  .then(function (winners) {
+    if (argv._.length === 0) {
+      var freq = powerball.frequencies(winners)
+      for (var i = 0; i < argv.count; i++) {
+        var predictions = powerball.predict(freq.white, freq.red, argv.time).map(function (n) { return pad(n, 2) })
+        var red = predictions.pop()
+        predictions.sort()
+        console.log(predictions.join(' ') + ' ' + red)
+      }
+    } else {
+      var payout = powerball.payout(argv._, winners.pop(), argv.powerplay)
+      console.log('According to the draw on ' + new Date(payout.drawn.date) + ' (' + payout.drawn.white.join(' ') + ' ' + payout.drawn.red + ' - ' + payout.drawn.powerplay + 'x )')
+      console.log('You have ' + payout.winning_white.length + ' matching white numbers and ' + (payout.red_match ? 1 : 0) + ' red matches. You should get paid $' + payout.pay + '.')
     }
-  } else {
-    var payout = powerball.payout(argv._, winners.pop(), argv.powerplay)
-    console.log('According to the draw on ' + new Date(payout.drawn.date) + ' (' + payout.drawn.white.join(' ') + ' ' + payout.drawn.red + ' - ' + payout.drawn.powerplay + 'x )')
-    console.log('You have ' + payout.winning_white.length + ' matching white numbers and ' + (payout.red_match ? 1 : 0) + ' red matches. You should get paid $' + payout.pay + '.')
-  }
-})
+  })
+  .catch(function (err) { throw err })

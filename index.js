@@ -1,53 +1,56 @@
 import fetch from 'node-fetch'
 import { Stats } from 'fast-stats'
+import _ from 'lodash'
 
-// PRIVATE: return frequency of members of an array, sorted by number pulled
-function sortByFrequency (array) {
-  var frequency = {}
-
-  array.forEach(value => {
-    frequency[value] = 0
-  })
-
-  var uniques = array.filter(value => {
-    return ++frequency[value] === 1
-  })
-
-  return uniques.sort((a, b) => {
-    return frequency[b] - frequency[a]
-  }).map(ball => {
-    return [ball, frequency[ball]]
-  })
+/**
+ * All possible white/red balls for different datestamps
+ * @type {Object}
+ */
+const ballMatrix = {
+  0: [45, 45],
+  878716800000: [49, 42],
+  1034146800000: [43, 42],
+  1125471600000: [55, 42],
+  1231315200000: [59, 39],
+  1326873600000: [59, 35],
+  1444201200000: [69, 26],
+  8640000000000000: undefined
 }
 
-// PRIVATE: remove an item from the frequency pool of winners
-function removeFromPool (member, pool) {
-  var i = pool[0].indexOf(member)
-  if (i !== -1) {
-    pool[0].splice(i, 1)
-    pool[1].splice(i, 1)
-  }
-  return pool
-}
-
-// PRIVATE: given a frequency pool of winners and a max for possible numbers, add any that are un-accounted for with a weight of 1
-function addRemaining (pool, max) {
-  for (let i = 1; i <= max; i++) {
-    var found = pool[0].indexOf(i)
-    if (found === -1) {
-      pool[0].push(i)
-      pool[1].push(0)
-    } else {
-      pool[1][found] = pool[1][found] + 1
+/**
+ * Get ball-maxes for a given date
+ * @param  {Date} date  Date to check [now]
+ * @return {Array}      white, red ball-max
+ */
+function balls (date) {
+  date = date || new Date()
+  var ts = date.getTime()
+  var keys = _.keys(ballMatrix)
+  for (var k in keys) {
+    if (ts >= keys[k] && ts < keys[ Number(k) + 1 ]) {
+      return ballMatrix[ keys[k] ]
     }
   }
-  return pool
 }
 
-// PRIVATE: weighted random
-function getWeightedRandomItem (pool) {
-  var list = pool[0]
-  var weight = pool[1]
+/**
+ * PRIVATE: shorthand for ranged random
+ * @param  {Number} min Min possible value
+ * @param  {Number} max Max possible value
+ * @return {Number}     Value
+ */
+function rand (min, max) {
+  return Math.random() * (max - min) + min
+}
+
+/**
+ * PRIVATE: get a random item from frequency pool, weighted by the number of times drawn
+ * @param  {Object} freq   A single ball-frequency array from `frequency()`
+ * @return {Number}        pick
+ */
+function getWeightedRandomItem (freq) {
+  var list = _.keys(freq)
+  var weight = _.values(freq)
   var total_weight = weight.reduce(function (prev, cur, i, arr) {
     return prev + cur
   })
@@ -56,7 +59,6 @@ function getWeightedRandomItem (pool) {
   for (var i = 0; i < list.length; i++) {
     weight_sum += weight[i]
     weight_sum = +weight_sum.toFixed(2)
-
     if (random_num <= weight_sum) {
       return list[i]
     }
@@ -64,7 +66,7 @@ function getWeightedRandomItem (pool) {
 }
 
 /**
- * Get winning numbers
+ * Get past winning numbers
  * @return {Promise}       Resolves to array of winner objects
  */
 function numbers () {
@@ -103,94 +105,93 @@ function numbers () {
 /**
  * Calculate frequencies of white & red balls
  * @param  {Array} winners  The winning numbers from  `numbers()`
- * @return {Array}          Array of white & red array of numbers & draw-weight
+ * @return {Object}         keyed with number, value is frequency
  */
 function frequencies (winners) {
-  var white = []
-  var red = []
+  var out = {white: {}, red: {}}
   winners.forEach(winner => {
-    white = white.concat(winner.white)
-    red.push(winner.red)
+    winner.white.forEach(white => {
+      out.white[white] = out.white[white] ? out.white[white] + 1 : 1
+    })
+    out.red[winner.red] = out.red[winner.red] ? out.red[winner.red] + 1 : 1
   })
-  return {white: sortByFrequency(white), red: sortByFrequency(red)}
+  return out
 }
 
 /**
  * Calculate arithmetic mean of ball-count
- * @param  {Array} freq  A single ball-frequency array from `frequency()`
- * @return {Number}      Arithmatic Mean
+ * @param  {Object} freq  A single ball-frequency array from `frequency()`
+ * @return {Number}      Arithmatic Mean of weights
  */
 function mean (freq) {
-  var s1 = new Stats().push(freq.map(v => {
-    return v[1]
-  }))
-  return s1.amean().toFixed(4)
+  var s1 = new Stats().push(_.values(freq))
+  return s1.amean().toFixed()
 }
 
 /**
  * Calculate geometric mean of ball-count
- * @param  {Array} freq  A single ball-frequency array from `frequency()`
- * @return {Number}      Geometric Mean
+ * @param  {Object} freq  A single ball-frequency array from `frequency()`
+ * @return {Number}      Geometric Mean of weights
  */
 function gmean (freq) {
-  var s1 = new Stats().push(freq.map(v => {
-    return v[1]
-  }))
-  return s1.gmean().toFixed(4)
+  var s1 = new Stats().push(_.values(freq))
+  return s1.gmean().toFixed()
 }
 
 /**
  * Calculate median of ball-count
- * @param  {Array} freq  A single ball-frequency array from `frequency()`
- * @return {Number}      Median
+ * @param  {Object} freq  A single ball-frequency array from `frequency()`
+ * @return {Number}      Median of weights
  */
 function median (freq) {
-  var s1 = new Stats().push(freq.map(v => {
-    return v[1]
-  }))
-  return s1.median().toFixed(4)
+  var s1 = new Stats().push(_.values(freq))
+  return s1.median().toFixed()
 }
 
 /**
  * Calculate range of ball-count
- * @param  {Array} freq  A single ball-frequency array from `frequency()`
- * @return {Array}       High/low range of numbers for value.
+ * @param  {Object} freq  A single ball-frequency array from `frequency()`
+ * @return {Array}       High/low range of numbers for weights.
  */
 function range (freq) {
-  var s1 = new Stats().push(freq.map(v => {
-    return v[1]
-  }))
+  var s1 = new Stats().push(_.values(freq))
   return s1.range()
 }
 
 /**
  * Calculate standard deviation of ball-count
- * @param  {Array} freq   A single ball-frequency array from `frequency()`
- * @return {Number}       Standard Deviation
+ * @param  {Object} freq   A single ball-frequency array from `frequency()`
+ * @return {Number}       Standard Deviation of weights
  */
 function stddev (freq) {
-  var s1 = new Stats().push(freq.map(v => {
-    return v[1]
-  }))
-  return s1.stddev().toFixed(4)
+  var s1 = new Stats().push(_.values(freq))
+  return s1.stddev().toFixed()
 }
 
 /**
  * Predict winning numbers
- * @param  {Array}   white     White ball-frequency array from `frequency()`
- * @param  {Array}   red       Red ball-frequency array from `frequency()`
- * @param  {Boolean} newRules  Does it use the new (Oct 2015) rules or not?
+ * @param  {Object}  white     White ball-frequency array from `frequency()`
+ * @param  {Object}  red       Red ball-frequency array from `frequency()`
+ * @param  {Date}    time      Different dates have differnt ball-sets [now]
  * @return {Array}             The numbers you should play
  */
-function predict (white, red, newRules) {
-  newRules = newRules === undefined ? true : newRules
-  red = addRemaining(red, newRules ? 26 : 35)
-  white = addRemaining(white, newRules ? 69 : 59)
+function predict (white, red, time) {
+  time = time || new Date()
+  var valid = balls(time)
+
+  // remove invalid numbers
+  white = _.omit(white, (val, key) => {
+    return Number(key) > valid[0]
+  })
+  red = _.omit(red, (val, key) => {
+    return Number(key) > valid[1]
+  })
+
   var out = []
-  for (let j = 0; j < 5; j++) {
+  for (var i = 0; i < 5; i++) {
     var newWhite = getWeightedRandomItem(white)
     out.push(newWhite)
-    white = removeFromPool(newWhite, white)
+    delete white[newWhite]
   }
   out.sort((a, b) => { return a - b })
   out.push(getWeightedRandomItem(red))
@@ -198,12 +199,12 @@ function predict (white, red, newRules) {
 }
 
 /**
- * Check if your numbers won
+ * Check if your numbers won (only current rules)
  * http://www.powerball.com/powerball/pb_prizes.asp
  * @param  {Array}   pick      Your number picks (6-length array)
  * @param  {Object}  winner    A single draw from `number()`
  * @param  {Boolean} powerplay Did you mark power-play on your ticket?
- * @return {Mixed}             true for jackpot, if Number: amount you won
+ * @return {Boolean|Number}    true for jackpot, if Number: amount you won
  */
 function payout (pick, winner, powerplay) {
   pick = pick.map(Number)
@@ -213,7 +214,7 @@ function payout (pick, winner, powerplay) {
     return winner.white.indexOf(p) !== -1
   })
   out.pay = 0
-  if (!out.redMatch) {
+  if (!out.red_match) {
     if (out.winning_white.length === 3) {
       out.pay = 7
     } else if (out.winning_white.length === 4) {
@@ -234,13 +235,13 @@ function payout (pick, winner, powerplay) {
       out.pay = 'jackpot'
     }
   }
-  out.drawn = winner
   out.pay = out.multiply * out.pay
+  out.drawn = winner
   return out
 }
 
 const σ = stddev
 const μ = mean
-const powerball = {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ, predict, payout}
+const powerball = {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ, predict, payout, balls}
 
 export default powerball
