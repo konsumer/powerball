@@ -13,7 +13,7 @@ I included the command `powerball`, if you install with `npm install -g powerbal
 Usage: powerball [options] [numbers]
 
 Options:
-  -h, --help       Show help                                           [boolean]
+  -h, --help       Show help
   --count, -c      Count of number sets to return.              [default: 10]
   --powerplay, -p  For checking: did you enable powerplay?      [boolean]
   --time, -t       What time should the rules be pulled from?   [default: now]
