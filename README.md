@@ -27,28 +27,28 @@ Examples:
 ## Objects
 
 <dl>
-<dt><a href="#Statistical">`Statistical`</a> : <code>object</code></dt>
+<dt><a href="#Statistical">Statistical</a> : <code>object</code></dt>
 <dd></dd>
-<dt><a href="#Powerball">`Powerball`</a> : <code>object</code></dt>
+<dt><a href="#Powerball">Powerball</a> : <code>object</code></dt>
 <dd></dd>
 </dl>
 
 <a name="Statistical"></a>
-## `Statistical` : <code>object</code>
+## Statistical : <code>object</code>
 **Kind**: global namespace  
 
-* [`Statistical`](#Statistical) : <code>object</code>
-    * [`.μ(freq)`](#Statistical.μ) ⇒ <code>Number</code>
-    * [`.gmean(freq)`](#Statistical.gmean) ⇒ <code>Number</code>
-    * [`.median(freq)`](#Statistical.median) ⇒ <code>Number</code>
-    * [`.range(freq)`](#Statistical.range) ⇒ <code>Array</code>
-    * [`.σ(freq)`](#Statistical.σ) ⇒ <code>Number</code>
+* [Statistical](#Statistical) : <code>object</code>
+    * [.μ(freq)](#Statistical.μ) ⇒ <code>Number</code>
+    * [.gmean(freq)](#Statistical.gmean) ⇒ <code>Number</code>
+    * [.median(freq)](#Statistical.median) ⇒ <code>Number</code>
+    * [.range(freq)](#Statistical.range) ⇒ <code>Array</code>
+    * [.σ(freq)](#Statistical.σ) ⇒ <code>Number</code>
 
 
 -
 
 <a name="Statistical.μ"></a>
-### `Statistical.μ(freq)` ⇒ <code>Number</code>
+### Statistical.μ(freq) ⇒ <code>Number</code>
 Calculate arithmetic mean of ball-count
 
 **Kind**: static method of <code>[Statistical](#Statistical)</code>  
@@ -71,7 +71,7 @@ console.log(powerball.mean(f.white))
 -
 
 <a name="Statistical.gmean"></a>
-### `Statistical.gmean(freq)` ⇒ <code>Number</code>
+### Statistical.gmean(freq) ⇒ <code>Number</code>
 Calculate geometric mean of ball-count
 
 **Kind**: static method of <code>[Statistical](#Statistical)</code>  
@@ -94,7 +94,7 @@ console.log(powerball.gmean(f.white))
 -
 
 <a name="Statistical.median"></a>
-### `Statistical.median(freq)` ⇒ <code>Number</code>
+### Statistical.median(freq) ⇒ <code>Number</code>
 Calculate median of ball-count
 
 **Kind**: static method of <code>[Statistical](#Statistical)</code>  
@@ -117,7 +117,7 @@ console.log(powerball.median(f.white))
 -
 
 <a name="Statistical.range"></a>
-### `Statistical.range(freq)` ⇒ <code>Array</code>
+### Statistical.range(freq) ⇒ <code>Array</code>
 Calculate range of ball-count
 
 **Kind**: static method of <code>[Statistical](#Statistical)</code>  
@@ -140,7 +140,7 @@ console.log(powerball.range(f.white))
 -
 
 <a name="Statistical.σ"></a>
-### `Statistical.σ(freq)` ⇒ <code>Number</code>
+### Statistical.σ(freq) ⇒ <code>Number</code>
 Calculate standard deviation of ball-count
 
 **Kind**: static method of <code>[Statistical](#Statistical)</code>  
@@ -163,21 +163,21 @@ console.log(powerball.σ(f.white))
 -
 
 <a name="Powerball"></a>
-## `Powerball` : <code>object</code>
+## Powerball : <code>object</code>
 **Kind**: global namespace  
 
-* [`Powerball`](#Powerball) : <code>object</code>
-    * [`.balls([date])`](#Powerball.balls) ⇒ <code>Array</code>
-    * [`.numbers()`](#Powerball.numbers) ⇒ <code>Promise</code>
-    * [`.frequencies(winners)`](#Powerball.frequencies) ⇒ <code>Object</code>
-    * [`.predict(white, red, [time])`](#Powerball.predict) ⇒ <code>Array</code>
-    * [`.payout(pick, winner, powerplay)`](#Powerball.payout) ⇒ <code>Boolean</code> &#124; <code>Number</code>
+* [Powerball](#Powerball) : <code>object</code>
+    * [.balls([date])](#Powerball.balls) ⇒ <code>Array</code>
+    * [.numbers()](#Powerball.numbers) ⇒ <code>Promise</code>
+    * [.frequencies(winners)](#Powerball.frequencies) ⇒ <code>Object</code>
+    * [.predict(white, red, [time])](#Powerball.predict) ⇒ <code>Array</code>
+    * [.payout(pick, winner, powerplay)](#Powerball.payout) ⇒ <code>Boolean</code> &#124; <code>Number</code>
 
 
 -
 
 <a name="Powerball.balls"></a>
-### `Powerball.balls([date])` ⇒ <code>Array</code>
+### Powerball.balls([date]) ⇒ <code>Array</code>
 Get ball-maxes for a given date
 
 **Kind**: static method of <code>[Powerball](#Powerball)</code>  
@@ -201,7 +201,7 @@ powerball.balls(new Date('1/8/2009'))
 -
 
 <a name="Powerball.numbers"></a>
-### `Powerball.numbers()` ⇒ <code>Promise</code>
+### Powerball.numbers() ⇒ <code>Promise</code>
 Get past winning numbers
 
 **Kind**: static method of <code>[Powerball](#Powerball)</code>  
@@ -216,7 +216,7 @@ powerball.numbers().then(winners => {
 -
 
 <a name="Powerball.frequencies"></a>
-### `Powerball.frequencies(winners)` ⇒ <code>Object</code>
+### Powerball.frequencies(winners) ⇒ <code>Object</code>
 Calculate frequencies of white & red balls
 
 **Kind**: static method of <code>[Powerball](#Powerball)</code>  
@@ -234,7 +234,7 @@ console.log(powerball.frequencies(winners))
 -
 
 <a name="Powerball.predict"></a>
-### `Powerball.predict(white, red, [time])` ⇒ <code>Array</code>
+### Powerball.predict(white, red, [time]) ⇒ <code>Array</code>
 Predict winning numbers
 
 **Kind**: static method of <code>[Powerball](#Powerball)</code>  
@@ -259,7 +259,7 @@ console.log(powerball.predict(f.white, f.red, new Date('1/1/98')))
 -
 
 <a name="Powerball.payout"></a>
-### `Powerball.payout(pick, winner, powerplay)` ⇒ <code>Boolean</code> &#124; <code>Number</code>
+### Powerball.payout(pick, winner, powerplay) ⇒ <code>Boolean</code> &#124; <code>Number</code>
 Check if your numbers won (only current rules)
 [http://www.powerball.com/powerball/pb_prizes.asp](http://www.powerball.com/powerball/pb_prizes.asp)
 
