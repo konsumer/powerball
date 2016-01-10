@@ -27,10 +27,12 @@ const ballMatrix = {
  * @return {Array}           white, red ball-max
  * @memberof Powerball
  * @example <caption>Current Ball Maxes</caption>
- * ```js// returns [69, 26]
+ * ```js
+ * // returns [69, 26]
  * powerball.balls()```
  * @example <caption>Old Ball Maxes</caption>
- * ```js// returns [59, 39]
+ * ```js
+ * // returns [59, 39]
  * powerball.balls(new Date('1/8/2009'))```
  */
 function balls (date) {
