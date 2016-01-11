@@ -20,6 +20,11 @@ var argv = require('yargs')
   .alias('time', 't')
   .describe('t', 'What time should the rules be pulled from?')
 
+  .version(function() {
+    return require('./package.json').version
+  })
+  .alias('version', 'v')
+
   .help('h')
   .alias('h', 'help')
 
