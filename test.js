@@ -13,14 +13,14 @@ describe('numbers', () => {
         throw err
       })
   })
+})
 
-  it('should be able to grab past winning numbers in date-range', () => {
-    var startDate = new Date('11/25/2015')
-    var endDate = new Date('01/02/2016')
-    return powerball.numbers(startDate, endDate)
+describe('numbersAll', () => {
+  it('should be able to grab ', () => {
+    return powerball.numbersAll()
       .then((num) => {
         assert(Array.isArray(num), 'is an array')
-        assert.equal(num.length, 12, 'is 12 winners')
+        assert.isAbove(num.length, 100, 'is more than 100 picks')
       })
       .catch(err => {
         throw err

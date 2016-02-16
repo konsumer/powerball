@@ -1,6 +1,6 @@
 {
   "name": "powerball",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "My attempt at predicting powerball numbers with nodejs",
   "main": "lib.js",
   "scripts": {
@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/konsumer/powerball",
   "dependencies": {
+    "cfb": "^0.10.3",
     "fast-stats": "0.0.3",
     "lodash": "^3.10.1",
     "moment": "^2.11.1",

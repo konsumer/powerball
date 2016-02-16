@@ -121,6 +121,42 @@ function numbers () {
 }
 
 /**
+ * Get numbers drawn in pre/post tests, too
+ * @return {Promise}       Resolves to array of winner objects
+ * @memberof Powerball
+ * @example <caption>Get Current Numbers</caption>
+ * powerball.numbersDryRun().then(winners => {
+ *   console.log(winners)
+ * })
+ */
+function numbersAll () {
+  return fetch('http://www.powerball.com/powerball/testpb.doc')
+    .then(res => {
+      return res.text()
+    })
+    .then(blob => {
+      return ('08/31/05' + blob.split('08/31/05').pop().split('')[0])
+        .split('\r')
+        .filter(e => { return e !== '' })
+        .map(row => { return row.split('\t') })
+    })
+    .then(rows => {
+      return rows.map(line => {
+        return {
+          date: new Date(line[0]).getTime(),
+          white: line.slice(1, 6).map(v => {
+            return parseInt(v, 10)
+          }),
+          red: parseInt(line[8], 10),
+          powerplay: line[9] === '--' ? 1 : parseInt(line[9], 10),
+          drawType: line[12],
+          extra: [6, 7, 10, 11].map(e => { return parseInt(line[e], 10) })
+        }
+      })
+    })
+}
+
+/**
  * Calculate frequencies of white & red balls
  * @param  {Array} winners  The winning numbers from  {@link Powerball.numbers}
  * @return {Object}         keyed with number, value is frequency
@@ -305,6 +341,6 @@ function payout (pick, winner, powerplay) {
 
 const σ = stddev
 const μ = mean
-const powerball = {numbers, frequencies, mean, μ, gmean, median, range, stddev, σ, predict, payout, balls}
+const powerball = {numbers, numbersAll, frequencies, mean, μ, gmean, median, range, stddev, σ, predict, payout, balls}
 
 export default powerball
