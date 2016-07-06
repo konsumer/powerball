@@ -1,6 +1,6 @@
 {
   "name": "powerball",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "My attempt at predicting powerball numbers with nodejs",
   "main": "lib.js",
   "scripts": {
